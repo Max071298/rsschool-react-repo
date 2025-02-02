@@ -10,6 +10,13 @@ export interface SearchInputType {
 export interface AppStateProps {
   searchText: string;
   isSpinnerActive: boolean;
+  errorTypeSearch: number;
+  searchData: Array<TotalSearchData>;
+}
+
+export interface TotalSearchData {
+  name: string;
+  url: string;
 }
 
 export interface ErrorBoundaryProps {
@@ -18,4 +25,8 @@ export interface ErrorBoundaryProps {
 
 export interface ErrorBoundaryState {
   hasError: boolean;
+}
+
+export interface DataComponentProps {
+  name?: string;
 }

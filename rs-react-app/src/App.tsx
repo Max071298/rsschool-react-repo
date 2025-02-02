@@ -1,13 +1,16 @@
 import './App.css';
 import React from 'react';
-import { HeaderStateProps } from './interfaces/interfaces';
+import { AppStateProps } from './interfaces/interfaces';
 import SearchInput from './Components/SearchInput';
 import SearchButton from './Components/SearchButton';
 import Spinner from './Components/Spinner';
+import ErrorButton from './Components/ErrorButton';
+import ErrorBoundary from './Components/ErrorBoundary';
 
 class App extends React.Component {
-  state: Readonly<HeaderStateProps> = {
+  state: Readonly<AppStateProps> = {
     searchText: localStorage.getItem('lastSearch') ?? '',
+    isSpinnerActive: false,
   };
 
   handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,17 +23,21 @@ class App extends React.Component {
   };
 
   getData = () => {
-    fetch('https://pokeapi.co/api/v2/berry/cheri/', { method: 'GET' }).then(
+    this.setState({ isSpinnerActive: true });
+    fetch('https://pokeapi.co/api/v2/berry/', { method: 'GET' }).then(
       (data) => {
         const result = data.json();
-        result.then((data2) => console.log(data2));
+        result.then((data2) => {
+          this.setState({ isSpinnerActive: false });
+          console.log(data2);
+        });
       }
     );
   };
   render(): React.ReactNode {
     return (
       <>
-        <header>
+        <header className="header">
           <h1>POKEAPI Berry search</h1>
           <SearchInput
             value={this.state.searchText}
@@ -38,9 +45,14 @@ class App extends React.Component {
           />
           <SearchButton onClick={this.handleSubmitRequest} />
         </header>
-        <main>
-          <Spinner />
+        <main className="main">
+          {this.state.isSpinnerActive ? <Spinner /> : ''}
         </main>
+        <footer>
+          <ErrorBoundary>
+            <ErrorButton />
+          </ErrorBoundary>
+        </footer>
       </>
     );
   }

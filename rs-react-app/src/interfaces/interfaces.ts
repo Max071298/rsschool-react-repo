@@ -7,6 +7,15 @@ export interface SearchInputType {
   value: string;
 }
 
-export interface HeaderStateProps {
+export interface AppStateProps {
   searchText: string;
+  isSpinnerActive: boolean;
+}
+
+export interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+export interface ErrorBoundaryState {
+  hasError: boolean;
 }

@@ -1,9 +1,13 @@
-import React from 'react';
+import { SearchButtonType } from '../interfaces/interfaces';
 
-class SearchButton extends React.Component {
-  render(): React.ReactNode {
-    return <button type="button" className="search-button"></button>;
-  }
-}
+const SearchButton: React.FC<SearchButtonType> = ({
+  onClick,
+}: SearchButtonType) => {
+  return (
+    <button type="button" className="search-button" onClick={onClick}>
+      Search
+    </button>
+  );
+};
 
 export default SearchButton;

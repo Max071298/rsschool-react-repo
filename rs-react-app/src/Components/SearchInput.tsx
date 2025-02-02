@@ -1,9 +1,17 @@
-import React from 'react';
+import { SearchInputType } from '../interfaces/interfaces';
 
-class SearchInput extends React.Component {
-  render(): React.ReactNode {
-    return <input type="search" className="search-input" />;
-  }
-}
+const SearchInput: React.FC<SearchInputType> = ({
+  onChange,
+  value,
+}: SearchInputType) => {
+  return (
+    <input
+      type="search"
+      className="search-input"
+      value={value}
+      onChange={onChange}
+    />
+  );
+};
 
 export default SearchInput;

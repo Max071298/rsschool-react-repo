@@ -11,8 +11,11 @@ class App extends React.Component {
   state: Readonly<AppStateProps> = {
     searchText: localStorage.getItem('lastSearch') ?? '',
     isSpinnerActive: false,
-    errorTypeSearch: 0,
-    searchData: [],
+    errorTypeSearch:
+      JSON.parse(localStorage.getItem('errorTypeSearch') as string) ?? 0,
+    searchData: localStorage.getItem('searchData')
+      ? JSON.parse(localStorage.getItem('searchData') as string)
+      : [],
   };
 
   handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,30 +35,34 @@ class App extends React.Component {
     }).then((data) => {
       if (data.status) {
         this.setState({ errorTypeSearch: data.status });
+        localStorage.setItem('errorTypeSearch', JSON.stringify(data.status));
+        localStorage.setItem('searchData', JSON.stringify([]));
       }
       const result = data.json();
       result
         .then((data2) => {
           this.setState({ isSpinnerActive: false });
           if (data2.smoothness) {
+            const finalData = [
+              {
+                name: data2.name,
+                growth_time: data2.growth_time,
+                size: data2.size,
+                smoothness: data2.smoothness,
+              },
+            ];
             this.setState({
-              searchData: [
-                {
-                  name: data2.name,
-                  growth_time: data2.growth_time,
-                  size: data2.size,
-                  smoothness: data2.smoothness,
-                },
-              ],
+              searchData: finalData,
             });
+            localStorage.setItem('searchData', JSON.stringify(finalData));
           } else if (data2.results) {
             this.setState({ searchData: data2.results });
+            localStorage.setItem('searchData', JSON.stringify(data2.results));
           }
-          console.log(data2);
         })
         .catch((error) => {
           this.setState({ isSpinnerActive: false });
-          console.error(error);
+          console.error(error.message);
         });
     });
   };
@@ -95,7 +102,7 @@ class App extends React.Component {
           )}
           {this.state.errorTypeSearch >= 500 ? (
             <div className="throwned-error">
-              The server encountered error an error and could not complete your
+              The server encountered an error and could not complete your
               request.
             </div>
           ) : (

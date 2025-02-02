@@ -16,7 +16,10 @@ export interface AppStateProps {
 
 export interface TotalSearchData {
   name: string;
-  url: string;
+  url?: string;
+  growth_time?: number;
+  size?: number;
+  smoothness?: number;
 }
 
 export interface ErrorBoundaryProps {

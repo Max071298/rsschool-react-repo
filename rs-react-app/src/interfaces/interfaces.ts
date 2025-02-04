@@ -30,6 +30,22 @@ export interface ErrorBoundaryState {
   hasError: boolean;
 }
 
-export interface DataComponentProps {
+export interface HeaderProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick: () => void;
+}
+
+export interface MainProps {
+  errorTypeSearch: number;
+  isSpinnerActive: boolean;
+  searchData: Array<TotalSearchData>;
+}
+
+export interface ServerDataProps {
   name?: string;
+  growth_time?: number;
+  size?: number;
+  smoothness?: number;
+  results?: Array<{ name: string; url: string }>;
 }

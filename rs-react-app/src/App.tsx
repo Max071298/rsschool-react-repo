@@ -13,9 +13,7 @@ class App extends React.Component {
     isSpinnerActive: false,
     errorTypeSearch:
       JSON.parse(localStorage.getItem('errorTypeSearch') as string) ?? 0,
-    searchData: localStorage.getItem('searchData')
-      ? JSON.parse(localStorage.getItem('searchData') as string)
-      : [],
+    searchData: [],
   };
 
   handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +34,6 @@ class App extends React.Component {
       if (data.status) {
         this.setState({ errorTypeSearch: data.status });
         localStorage.setItem('errorTypeSearch', JSON.stringify(data.status));
-        localStorage.setItem('searchData', JSON.stringify([]));
       }
       const result = data.json();
       result
@@ -54,10 +51,8 @@ class App extends React.Component {
             this.setState({
               searchData: finalData,
             });
-            localStorage.setItem('searchData', JSON.stringify(finalData));
           } else if (data2.results) {
             this.setState({ searchData: data2.results });
-            localStorage.setItem('searchData', JSON.stringify(data2.results));
           }
         })
         .catch((error) => {
@@ -66,6 +61,10 @@ class App extends React.Component {
         });
     });
   };
+
+  componentDidMount(): void {
+    this.getData();
+  }
   render(): React.ReactNode {
     return (
       <>
